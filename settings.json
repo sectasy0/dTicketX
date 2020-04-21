@@ -1,0 +1,14 @@
+{
+    "warns": {
+        "ban-warns-reach": true,
+        "max-warns": 0,
+        "ban-time": 259200
+    },
+    "channels": {
+        "support-channel-id": 698899537871372362,
+        "support-category-id": 698879022322679858,
+        "support-log-channeld-id": 698899537871372362
+    },
+    "support-role": "ADMIN",
+    "enable-channel-logger": true
+}

@@ -1,0 +1,3 @@
+
+class TempBans():
+    pass

@@ -18,10 +18,9 @@ async def load(ctx, extension):
 async def unload(ctx, extension):
     client.unload_extension(f'cogs.{extension}')
 
-
 for filename in listdir('./cogs'):
     if filename.endswith('.py'):
         if filename[:-3] == "__init__": continue
         client.load_extension(f'cogs.{filename[:-3]}')
 
-client.run("Your tocken here")
+client.run("Your token here")

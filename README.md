@@ -1,4 +1,4 @@
-# dTicketX 1.0
+# dTicketX 1.1
 > Discord ticketing system for you server.
 > .. and much more
 
@@ -38,11 +38,9 @@ $ pip install -r src/REQUIREMENTS.txt
         "support-channel-id": 000000000000000000, // Paste channel id, where bot send initial message. 
         "support-category-id": 000000000000000000, // Paste support category id.
         "support-log-channeld-id": 000000000000000000 // Paste channel id where will be send ticket logs.
-                                                    // No need set at the moment.
     },
     "support-role": "ADMIN", // Name of support role.
     "enable-channel-logger": true // if true bot send logs to support log channel.
-                                    // not implemented yet
 }
 ```
 
@@ -54,14 +52,21 @@ $ pip install -r src/REQUIREMENTS.txt
 - [ ] Warn system
 - [ ] Tempbans
 - [ ] More roles support
-- [ ] Channel logs
-- [ ] Log ticket channels
+- [X] Channel logs
+- [X] Log messages from ticket channel
 
 ### Contributing
 - Fork this repository
 - Clone this repo to your local machine
 - Hack away!
 - Create a new pull request
+
+# Changelog
+## [1.0.0] - 22/04/2020
+- Main bot functionalities.
+## [1.1.0] - 26/04/2020
+- Saving logs added to the channel.
+- Saving logs added from ticket channels to file in logs/
 
 ### Contact with me
 - Email: lsddev@gmail.com

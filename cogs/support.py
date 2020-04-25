@@ -1,7 +1,7 @@
 import json
 
 from discord import (Game, Status, Embed, 
-    TextChannel, RawReactionActionEvent)
+    TextChannel, RawReactionActionEvent, Message)
 from discord.ext import commands
 
 
@@ -32,8 +32,17 @@ class Support(commands.Cog):
         await message.pin()
 
     @commands.Cog.listener()
+    async def on_message(self, message: Message):
+        data = await self.dataController.get_data()
+        settings = await self.dataController.get_settings()
+
+        if message.channel.id in data['ticket-channel-ids']:
+            await self.log.message(channel=message.channel, message=message)
+
+    @commands.Cog.listener()
     async def on_ready(self):
         await self.client.wait_until_ready()
+
         data = await self.dataController.get_data()
         settings = await self.dataController.get_settings()
         
@@ -60,11 +69,16 @@ class Support(commands.Cog):
         if not payload.user_id == self.client.user.id:
             if payload.channel_id in data['ticket-channel-ids'] and payload.emoji.name == "❌":
                 ticketChannel = self.client.get_channel(payload.channel_id)
+                logChannel = self.client.get_channel(settings['channels']['support-log-channeld-id'])
 
                 data['users-with-active-tickets'].remove(payload.member.id)
                 data['ticket-channel-ids'].remove(payload.channel_id)
 
                 await self.log.system(f"{self.client.user.name}// Ticket({ticketChannel.name}) has been closed by {payload.member.name}")
+
+                if settings['enable-channel-logger']:
+                    await self.log.channel(channel=logChannel, message=f"""User {payload.member.name} closed the ticket! channel name: {ticketChannel.name}""")
+                        
                 await ticketChannel.delete()
 
 
@@ -93,7 +107,13 @@ class Support(commands.Cog):
 
                             message = await ticketChannel.send(embed=em)
 
+                            logChannel = self.client.get_channel(settings['channels']['support-log-channeld-id'])
+
                             await self.log.system(f"{self.client.user.name}// A new ticket has been submitted from {payload.member.name}.")
+
+                            if settings['enable-channel-logger']:
+                                await self.log.channel(channel=logChannel, message=f"""User {payload.member.name} created the ticket! channel name: {logChannel.name}""")
+
                             await message.add_reaction("\U0000274c")
                             await message.pin()
 

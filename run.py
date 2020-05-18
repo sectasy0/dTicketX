@@ -5,10 +5,15 @@ from discord.ext import commands
 
 client = commands.Bot(command_prefix="^")
 
+
 @client.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
         await ctx.send(f":exclamation: Command not found.")
+
+@client.event
+async def on_ready():
+    print(f"Running bot on account: {client.user.name}")
 
 @client.command()
 async def load(ctx, extension):
@@ -23,4 +28,4 @@ for filename in listdir('./cogs'):
         if filename[:-3] == "__init__": continue
         client.load_extension(f'cogs.{filename[:-3]}')
 
-client.run("Your token here")
+client.run("your token here")

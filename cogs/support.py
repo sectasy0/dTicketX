@@ -41,6 +41,7 @@ class Support(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
+        print("[*] Support module loaded successfuly")
         await self.client.wait_until_ready()
 
         data = await self.dataController.get_data()
@@ -65,7 +66,8 @@ class Support(commands.Cog):
     async def on_raw_reaction_add(self, payload: RawReactionActionEvent):
         data = await self.dataController.get_data()
         settings = await self.dataController.get_settings()
-
+        
+        changed = False
         if not payload.user_id == self.client.user.id:
             if payload.channel_id in data['ticket-channel-ids'] and payload.emoji.name == "❌":
                 ticketChannel = self.client.get_channel(payload.channel_id)
@@ -78,46 +80,48 @@ class Support(commands.Cog):
 
                 if settings['enable-channel-logger']:
                     await self.log.channel(channel=logChannel, message=f"""User {payload.member.name} closed the ticket! channel name: {ticketChannel.name}""")
-                        
+                
+                changed = True
                 await ticketChannel.delete()
 
 
-            if payload.channel_id ==  settings['channels']['support-channel-id'] and payload.emoji.name == "🎫":
+            if payload.channel_id == settings['channels']['support-channel-id'] and payload.emoji.name == "🎫":
                 if not payload.user_id in data['users-with-active-tickets']:
                     supportCategory = self.client.get_channel(settings['channels']['support-category-id'])
                     
-                    if not payload.member.id in data['ticket-channel-ids']:
-                            data['ticket-id-counter'] += 1
-                            ticketChannel = await supportCategory.create_text_channel(f"ticket#{data['ticket-id-counter']}-{payload.member.name}")
+                    data['ticket-id-counter'] += 1
+                    ticketChannel = await supportCategory.create_text_channel(f"ticket#{data['ticket-id-counter']}-{payload.member.name}")
 
-                            data['ticket-channel-ids'].append(ticketChannel.id)
-                            data['users-with-active-tickets'].append(payload.member.id)
+                    data['ticket-channel-ids'].append(ticketChannel.id)
+                    data['users-with-active-tickets'].append(payload.member.id)
 
-                            supportRole = [r for r in supportCategory.guild.roles if r.name == settings['support-role']][0]
+                    supportRole = [r for r in supportCategory.guild.roles if r.name == settings['support-role']][0]
 
-                            await supportCategory.set_permissions(supportCategory.guild.roles[0], send_messages=False, read_messages=False)
-                            await supportCategory.set_permissions(payload.member, send_messages=True, read_messages=True)
-                            await supportCategory.set_permissions(supportRole, send_messages=True, read_messages=True)
-                            
-                            em = Embed(title=f"New ticket from {payload.member.name}#{payload.member.discriminator}", 
-                                    description=f"""You just created a new ticket, please wait patiently! 
-                                                    Soon, {supportRole.mention} will respond to your ticker.
-                                                    
-                                                    To close ticket click on: :x:""", color=0x00a8ff)
+                    await supportCategory.set_permissions(supportCategory.guild.roles[0], send_messages=False, read_messages=False)
+                    await supportCategory.set_permissions(payload.member, send_messages=True, read_messages=True)
+                    await supportCategory.set_permissions(supportRole, send_messages=True, read_messages=True)
+                    
+                    em = Embed(title=f"New ticket from {payload.member.name}#{payload.member.discriminator}", 
+                            description=f"""You just created a new ticket, please wait patiently! 
+                                            Soon, {supportRole.mention} will respond to your ticker.
+                                            
+                                            To close ticket click on: :x:""", color=0x00a8ff)
 
-                            message = await ticketChannel.send(embed=em)
+                    message = await ticketChannel.send(embed=em)
 
-                            logChannel = self.client.get_channel(settings['channels']['support-log-channeld-id'])
+                    logChannel = self.client.get_channel(settings['channels']['support-log-channeld-id'])
 
-                            await self.log.system(f"{self.client.user.name}// A new ticket has been submitted from {payload.member.name}.")
+                    await self.log.system(f"{self.client.user.name}// A new ticket has been submitted from {payload.member.name}.")
 
-                            if settings['enable-channel-logger']:
-                                await self.log.channel(channel=logChannel, message=f"""User {payload.member.name} created the ticket! channel name: {logChannel.name}""")
+                    if settings['enable-channel-logger']:
+                        await self.log.channel(channel=logChannel, message=f"""User {payload.member.name} created the ticket! channel name: {logChannel.name}""")
 
-                            await message.add_reaction("\U0000274c")
-                            await message.pin()
+                    changed = True
+                    await message.add_reaction("🎫") # \U0000274c
+                    await message.pin()
 
-            await self.dataController.save_data(data)
+            if changed:
+                await self.dataController.save_data(data)
 
 def setup(client):
     client.add_cog(Support(client))

@@ -1,5 +1,6 @@
 {
     "ticket-channel-ids": [],
     "ticket-id-counter": 0,
-    "users-with-active-tickets": []
+    "users-with-active-tickets": [],
+    "warns": {}
 }

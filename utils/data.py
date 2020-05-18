@@ -2,7 +2,7 @@ import json
 import sys
 
 import asyncio
-
+        
 class DataController:
     def __init__(self):
         self.dataFile = "data.json"

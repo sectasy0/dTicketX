@@ -30,10 +30,9 @@ $ pip install -r src/REQUIREMENTS.txt
 {
     "warns": {
         "ban-warns-reach": true,
-
         "max-warns": 3,
         "ban-time": 10800
-    },// That funcionality is under development yet.
+    },
     "channels": {
         "support-channel-id": 000000000000000000, // Paste channel id, where bot send initial message. 
         "support-category-id": 000000000000000000, // Paste support category id.
@@ -47,10 +46,11 @@ $ pip install -r src/REQUIREMENTS.txt
 ### Commands
 ##### ^load extension_name - loads extension
 ##### ^unload extension_name - unloads extension
+##### ^warn @user <reson: optionally> - warn user
 
 ### Todo
-- [ ] Warn system
-- [ ] Tempbans
+- [X] Warn system
+- [X] Tempbans
 - [ ] More roles support
 - [X] Channel logs
 - [X] Log messages from ticket channel
@@ -66,10 +66,14 @@ $ pip install -r src/REQUIREMENTS.txt
 - Main bot functionalities.
 ## [1.1.0] - 26/04/2020
 - Saving logs added to the channel.
-- Saving logs added from ticket channels to file in logs/
+- Saving logs added from ticket channels to file in logs.
+## [1.2.0] - 19/05/2020
+- tempbans.
+- Warn system
+- Bugs fix
 
 ### Contact with me
-- Email: lsddev@gmail.com
+- Email: sectasy0@gmail.com
 
 ### Support me
 [<img src="/img/paypal.png">](https://www.paypal.me/wr4ith5)

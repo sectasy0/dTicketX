@@ -22,7 +22,7 @@ $ pip install -r src/REQUIREMENTS.txt
 #### 3. Go to the OAuth tab
 ![Alt text](/img/step3.png?raw=true "OAuth tab")
 #### 5. Set app permissions and get join link
-![Alt text](/img/step3.png?raw=true "Get join link")
+![Alt text](/img/step4.png?raw=true "Get join link")
 
 
 ### Configuration settings.json

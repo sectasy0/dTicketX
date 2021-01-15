@@ -74,6 +74,3 @@ $ pip install -r src/REQUIREMENTS.txt
 
 ### Contact with me
 - Email: sectasy0@gmail.com
-
-### Support me
-[<img src="/img/paypal.png">](https://www.paypal.me/wr4ith5)

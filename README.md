@@ -1,5 +1,5 @@
 # dTicketX 1.1
-> Discord ticketing system for you server.
+> Discord support tickets system for you server.
 > .. and much more
 
 ![Alt text](/img/discord1.png?raw=true "Screenshot1")
@@ -14,7 +14,7 @@ $ pip install -r src/REQUIREMENTS.txt
 ```
 
 ### Setup bot app https://discordapp.com/developers/
-#### 1. Create bot app on discord developers site
+#### 1. Create a bot app on discord developers site
 ![Alt text](/img/step1.png?raw=true "Create bot app")
 #### 2. Copy your app token and paste to main.py
 ![Alt text](/img/step2.png?raw=true "Get app token")
@@ -34,12 +34,12 @@ $ pip install -r src/REQUIREMENTS.txt
         "ban-time": 10800
     },
     "channels": {
-        "support-channel-id": 000000000000000000, // Paste channel id, where bot send initial message. 
+        "support-channel-id": 000000000000000000, // Paste channel id, where the bot sends an initial message. 
         "support-category-id": 000000000000000000, // Paste support category id.
-        "support-log-channeld-id": 000000000000000000 // Paste channel id where will be send ticket logs.
+        "support-log-channeld-id": 000000000000000000 // Paste channel id where the bot will send ticket logs.
     },
-    "support-role": "ADMIN", // Name of support role.
-    "enable-channel-logger": true // if true bot send logs to support log channel.
+    "support-role": "ADMIN", // Name of the support role.
+    "enable-channel-logger": true // if true bot send logs to support the log channel.
 }
 ```
 
@@ -57,20 +57,20 @@ $ pip install -r src/REQUIREMENTS.txt
 
 ### Contributing
 - Fork this repository
-- Clone this repo to your local machine
+- Clone this repository to your local machine
 - Hack away!
 - Create a new pull request
 
 # Changelog
 ## [1.0.0] - 22/04/2020
-- Main bot functionalities.
+- Complete main bot functionalities.
 ## [1.1.0] - 26/04/2020
-- Saving logs added to the channel.
-- Saving logs added from ticket channels to file in logs.
+- Add saving logs added to the channel.
+- Add saving logs added from ticket channels to file in logs.
 ## [1.2.0] - 19/05/2020
-- tempbans.
-- Warn system
-- Bugs fix
+- Add tempbans.
+- Add warn system.
+- fix bugs.
 
 ### Contact with me
 - Email: sectasy0@gmail.com

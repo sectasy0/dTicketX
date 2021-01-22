@@ -2,20 +2,22 @@ import json
 import sys
 
 import asyncio
+
+from typing import Dict
         
 class DataController:
     def __init__(self):
-        self.dataFile = "data.json"
-        self.settingsFile = "settings.json"
+        self.dataFile: str = "data.json"
+        self.settingsFile: str = "settings.json"
 
-    async def get_data(self) -> dict:
+    async def get_data(self) -> Dict:
         try:
             with open(self.dataFile, 'r') as f:
                 return json.load(f)
         except (FileNotFoundError, IOError):
             print("\x1b[1;31m[ERROR]:\x1b[0m data.json file not found, create a new.")
-            jsonData = {
-                "warns":{},
+            jsonData: Dict = {
+                "warns": {},
                 "ticket-channel-ids": [],
                 "ticket-id-counter": 0,
                 "users-with-active-tickets": []
@@ -25,13 +27,13 @@ class DataController:
             
             return jsonData
 
-    async def get_settings(self) -> dict:
+    async def get_settings(self) -> Dict:
         try:
             with open(self.settingsFile, 'r') as f:
                 return json.load(f)
         except (FileNotFoundError, IOError):
             print("\x1b[1;31m[ERROR]:\x1b[0m settings.json not found, create a new with default data, please fill data with yours")
-            jsonSettings = {
+            jsonSettings: Dict = {
                 "warns":{
                     "ban-warns-reach": True,
                     "max-warns": 3,

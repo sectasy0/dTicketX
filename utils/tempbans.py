@@ -3,11 +3,13 @@ import json
 from discord import Client, Member
 from datetime import datetime, timedelta
 
+from typing import Dict
+
 class BansDataController():
     def __init__(self):
-        self.bansFile = "bans.json"
+        self.bansFile: str = "bans.json"
 
-    async def get_bans(self):
+    async def get_bans(self) -> Dict[str, any]:
         try:
             with open(self.bansFile, 'r') as f:
                 return json.load(f)
@@ -15,16 +17,16 @@ class BansDataController():
             with open(self.bansFile, 'a+') as f:
                 json.dump({"ban-id": 0, "list": {}}, f, ensure_ascii=True, indent=4)
 
-    async def save(self, data: dict):
+    async def save(self, data: Dict[str, any]) -> None:
         with open(self.bansFile, 'w') as f:
             json.dump(data, f, ensure_ascii=True, indent=4)
 
 class Ban():
     def __init__(self):
-        self.bansData = BansDataController()
+        self.bansData: BansDataController = BansDataController()
 
-    async def temp(self, client: Client, member: Member, admin, reason, time):
-        bans = await self.bansData.get_bans()
+    async def temp(self, client: Client, member: Member, admin, reason, time) -> None:
+        bans: Dict[str, any] = await self.bansData.get_bans()
 
         if not member.guild_permissions.administrator:
             if not str(member.id) in bans['list']:

@@ -11,14 +11,14 @@ class Warns(commands.Cog):
         self.client = client
 
         self.dataController = DataController()
-        self.log = Logger()
-        self.ban = Ban()
+        self.log: Logger = Logger()
+        self.ban: Ban = Ban()
 
     async def on_ready(self):
         print("[*] Warns module loaded successfuly")
 
     async def add_warn(self, ctx, warnsValue: int, userName: str, reason: str):
-        em = Embed(title=f"Warn!", description=f"""
+        em: Embed = Embed(title=f"Warn!", description=f"""
                 User: {userName}
                 Received a warn ({warnsValue}/3) from {ctx.message.author}
                 Reason: {reason} """, color=0x00a8ff)

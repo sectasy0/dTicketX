@@ -1,9 +1,10 @@
 import json
 
 from discord import (Game, Status, Embed, 
-    TextChannel, RawReactionActionEvent, Message)
+    TextChannel, RawReactionActionEvent, Message, Role, Client)
 from discord.ext import commands
 
+from typer import Dict
 
 from utils.data import DataController
 from utils.logger import Logger
@@ -11,12 +12,12 @@ from utils.logger import Logger
 class Support(commands.Cog):
 
     def __init__(self, client):
-        self.client = client
+        self.client: Client = client
 
-        self.dataControlle: DataController = DataController()
+        self.dataController: DataController = DataController()
         self.log: Logger = Logger()
 
-    async def send_support_message(self, supportChannel: TextChannel):
+    async def send_support_message(self, supportChannel: TextChannel) -> None:
         em: Embed = Embed(title=f"Welcome to the support department!", description=f"""To create ticket react with: :ticket: 
 
                 Special text channel will be created after reacting which only you can see and administration.
@@ -26,29 +27,29 @@ class Support(commands.Cog):
                 Limit: 1 active ticket per user.
                 """, color=0x00a8ff)
 
-        message = await supportChannel.send(embed=em)
+        message: Message = await supportChannel.send(embed=em)
 
         await message.add_reaction("🎫")
         await message.pin()
 
     @commands.Cog.listener()
-    async def on_message(self, message: Message):
-        data = await self.dataController.get_data()
-        settings = await self.dataController.get_settings()
+    async def on_message(self, message: Message) -> None:
+        data: Dict[str, any] = await self.dataController.get_data()
+        settings: Dict[str, any] = await self.dataController.get_settings()
 
         if message.channel.id in data['ticket-channel-ids']:
             await self.log.message(channel=message.channel, message=message)
 
     @commands.Cog.listener()
-    async def on_ready(self):
+    async def on_ready(self) -> None:
         print("[*] Support module loaded successfuly")
         await self.client.wait_until_ready()
 
-        data = await self.dataController.get_data()
-        settings = await self.dataController.get_settings()
+        data: Dict[str, any] = await self.dataController.get_data()
+        settings: Dict[str, any] = await self.dataController.get_settings()
         
         try:
-            supportChannel = self.client.get_channel(settings['channels']['support-channel-id'])
+            supportChannel: TextChannel = self.client.get_channel(settings['channels']['support-channel-id'])
             if [msg async for msg in supportChannel.history()] == []:
                 await self.send_support_message(supportChannel=supportChannel)
             else:
@@ -63,11 +64,11 @@ class Support(commands.Cog):
         await self.client.change_presence(activity=Game("Support"), status=Status.online)
 
     @commands.Cog.listener()
-    async def on_raw_reaction_add(self, payload: RawReactionActionEvent):
-        data = await self.dataController.get_data()
-        settings = await self.dataController.get_settings()
+    async def on_raw_reaction_add(self, payload: RawReactionActionEvent -> None):
+        data: Dict[str, any] = await self.dataController.get_data()
+        settings: Dict[str, any] = await self.dataController.get_settings()
         
-        changed = False
+        changed: bool = False
         if not payload.user_id == self.client.user.id:
             if payload.channel_id in data['ticket-channel-ids'] and payload.emoji.name == "❌":
                 ticketChannel = self.client.get_channel(payload.channel_id)
@@ -95,21 +96,21 @@ class Support(commands.Cog):
                     data['ticket-channel-ids'].append(ticketChannel.id)
                     data['users-with-active-tickets'].append(payload.member.id)
 
-                    supportRole = [r for r in supportCategory.guild.roles if r.name == settings['support-role']][0]
+                    supportRole: Role = [r for r in supportCategory.guild.roles if r.name == settings['support-role']][0]
 
                     await supportCategory.set_permissions(supportCategory.guild.roles[0], send_messages=False, read_messages=False)
                     await supportCategory.set_permissions(payload.member, send_messages=True, read_messages=True)
                     await supportCategory.set_permissions(supportRole, send_messages=True, read_messages=True)
                     
-                    em = Embed(title=f"New ticket from {payload.member.name}#{payload.member.discriminator}", 
+                    em: Embed = Embed(title=f"New ticket from {payload.member.name}#{payload.member.discriminator}", 
                             description=f"""You just created a new ticket, please wait patiently! 
                                             Soon, {supportRole.mention} will respond to your ticker.
                                             
                                             To close ticket click on: :x:""", color=0x00a8ff)
 
-                    message = await ticketChannel.send(embed=em)
+                    message: Message = await ticketChannel.send(embed=em)
 
-                    logChannel = self.client.get_channel(settings['channels']['support-log-channeld-id'])
+                    logChannel: TextChannel = self.client.get_channel(settings['channels']['support-log-channeld-id'])
 
                     await self.log.system(f"{self.client.user.name}// A new ticket has been submitted from {payload.member.name}.")
 

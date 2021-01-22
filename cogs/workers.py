@@ -12,9 +12,9 @@ class Worker(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-        self.bansData = BansDataController()
-        self.data = DataController()
-        self.log = Logger()
+        self.bansData: BansDataController = BansDataController()
+        self.data: DataController = DataController()
+        self.log: Logger = Logger()
 
         self.unban.start()
     

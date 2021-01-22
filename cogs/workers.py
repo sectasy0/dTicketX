@@ -1,3 +1,4 @@
+from discord import Client
 from discord.ext import commands, tasks
 from datetime import datetime
 from dateutil import parser
@@ -10,7 +11,7 @@ from utils.logger import Logger
 
 class Worker(commands.Cog):
     def __init__(self, client):
-        self.client = client
+        self.client: Client = client
 
         self.bansData: BansDataController = BansDataController()
         self.data: DataController = DataController()
@@ -19,7 +20,7 @@ class Worker(commands.Cog):
         self.unban.start()
     
     @commands.Cog.listener()
-    async def on_ready(self):
+    async def on_ready(self) -> None:
         print("[*] Workers module loaded successfuly")
 
     async def _get_bans(self, bans: dict):
@@ -27,7 +28,7 @@ class Worker(commands.Cog):
             yield bans['list'][ban]
 
     @tasks.loop(minutes=8)
-    async def unban(self):
+    async def unban(self) -> None:
         await self.client.wait_until_ready()
 
         bans = await self.bansData.get_bans()
@@ -49,5 +50,5 @@ class Worker(commands.Cog):
             await self.bansData.save(bans)
 
 
-def setup(client):
+def setup(client) -> None:
     client.add_cog(Worker(client)) 

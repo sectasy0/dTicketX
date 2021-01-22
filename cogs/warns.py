@@ -5,19 +5,21 @@ from utils.data import DataController
 from utils.logger import Logger
 from utils.tempbans import Ban
 
+from typing import Dict
+
 
 class Warns(commands.Cog):
     def __init__(self, client):
-        self.client = client
+        self.client: Client = client
 
         self.dataController = DataController()
         self.log: Logger = Logger()
         self.ban: Ban = Ban()
 
-    async def on_ready(self):
+    async def on_ready(self) -> None:
         print("[*] Warns module loaded successfuly")
 
-    async def add_warn(self, ctx, warnsValue: int, userName: str, reason: str):
+    async def add_warn(self, ctx, warnsValue: int, userName: str, reason: str) -> None:
         em: Embed = Embed(title=f"Warn!", description=f"""
                 User: {userName}
                 Received a warn ({warnsValue}/3) from {ctx.message.author}
@@ -27,9 +29,9 @@ class Warns(commands.Cog):
 
     @commands.command(pass_context=True)
     @commands.has_permissions(kick_members=True)
-    async def warn(self, ctx, member: Member, *reason):
-        data = await self.dataController.get_data()
-        settings = await self.dataController.get_settings()
+    async def warn(self, ctx, member: Member, *reason) -> None:
+        data: Dict[str, any] = await self.dataController.get_data()
+        settings: Dict[str, any] = await self.dataController.get_settings()
 
         if not member.guild_permissions.administrator:
             if str(member.id) in data['warns']:
@@ -54,5 +56,5 @@ class Warns(commands.Cog):
         else:
             await ctx.send("You are not permitted to perform this operation")
 
-def setup(client):
+def setup(client) -> None:
     client.add_cog(Warns(client))        

@@ -13,11 +13,11 @@ class Support(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-        self.dataController = DataController()
-        self.log = Logger()
+        self.dataControlle: DataController = DataController()
+        self.log: Logger = Logger()
 
     async def send_support_message(self, supportChannel: TextChannel):
-        em = Embed(title=f"Welcome to the support department!", description=f"""To create ticket react with: :ticket: 
+        em: Embed = Embed(title=f"Welcome to the support department!", description=f"""To create ticket react with: :ticket: 
 
                 Special text channel will be created after reacting which only you can see and administration.
                 Describe your problem on this channel and we will try to solve it.

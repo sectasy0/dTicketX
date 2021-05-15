@@ -7,9 +7,9 @@
 
 ### Installation
 ```sh
-$ virtualenv auth
-$ cd auth && source bin/active
-$ git clone https://github.com/LSDkk5/dTicketX
+$ virtualenv ticketx
+$ cd ticketx && source bin/active
+$ git clone https://github.com/sectasy0/dTicketX
 $ pip install -r src/REQUIREMENTS.txt
 ```
 
@@ -73,4 +73,4 @@ $ pip install -r src/REQUIREMENTS.txt
 - fix bugs.
 
 ### Contact with me
-- Email: sectasy0@gmail.com
+- Email: lxstsoftware@gmail.com
